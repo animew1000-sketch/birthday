@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CIPHER VAULT // Classified Clue Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Top Status Bar -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="status-dot"></span>
+      <span class="brand-title">CIPHER_VAULT <span class="version">v3.0</span></span>
+    </div>
+    <div class="topbar-actions">
+      <div class="fragment-tracker" id="fragmentTracker">
+        <span class="frag-label">FRAGMENTS:</span>
+        <span class="frag-slot" id="frag-0">--</span>
+        <span class="frag-slot" id="frag-1">--</span>
+        <span class="frag-slot" id="frag-2">--</span>
+      </div>
+      <button class="btn-ghost" id="openGmBtn" title="Customize clues & generate shareable link (Shift + G)">
+        ⚙ GM SETUP
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Terminal Container -->
+  <main class="container">
+    <!-- Briefing Banner -->
+    <section class="panel briefing-panel">
+      <div class="panel-header">
+        <span class="tag tag-amber">CLASSIFIED TRANSMISSION</span>
+        <span class="clearance">CLEARANCE: COUSIN_01</span>
+      </div>
+      <h1 id="missionTitle">OPERATION: HIDDEN CIPHER</h1>
+      <p id="missionIntro" class="briefing-text">
+        Three security layers protect the final access code. Solve each transmission below and type the correct answer to extract its two-character code fragment, then enter the combined master code into the Vault Core at the bottom.
+      </p>
+    </section>
+
+    <!-- STAGE 1 -->
+    <section class="panel stage-panel active" id="stage-1">
+      <div class="panel-header">
+        <span class="stage-badge">LAYER 01 // TRANSMISSION 01</span>
+        <span class="stage-status" id="status-1">ACTIVE</span>
+      </div>
+      <h2 id="s1Title">The Silent Observer</h2>
+      <blockquote class="clue-box" id="s1Clue">
+        "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?"
+      </blockquote>
+
+      <div class="hint-row">
+        <button type="button" class="btn-hint" data-stage="1">💡 Request Hint</button>
+        <p class="hint-text hidden" id="hint-1">Think about something you unfold on a road trip or view on a GPS screen.</p>
+      </div>
+
+      <form class="solve-form" data-stage="1">
+        <input type="text" id="input-1" placeholder="Type your answer..." autocomplete="off" required />
+        <button type="submit" class="btn-primary">SUBMIT</button>
+      </form>
+      <div class="feedback" id="feedback-1"></div>
+    </section>
+
+    <!-- STAGE 2 -->
+    <section class="panel stage-panel locked" id="stage-2">
+      <div class="panel-header">
+        <span class="stage-badge">LAYER 02 // TRANSMISSION 02</span>
+        <span class="stage-status" id="status-2">AWAITING LAYER 01</span>
+      </div>
+      <h2 id="s2Title">The Second Key</h2>
+      <blockquote class="clue-box" id="s2Clue">
+        "What has keys that open no locks, space but no room, and you can enter but never go outside?"
+      </blockquote>
+
+      <div class="hint-row">
+        <button type="button" class="btn-hint" data-stage="2">💡 Request Hint</button>
+        <p class="hint-text hidden" id="hint-2">You are literally typing on one right now.</p>
+      </div>
+
+      <form class="solve-form" data-stage="2">
+        <input type="text" id="input-2" placeholder="Type your answer..." autocomplete="off" required disabled />
+        <button type="submit" class="btn-primary" disabled>SUBMIT</button>
+      </form>
+      <div class="feedback" id="feedback-2"></div>
+    </section>
+
+    <!-- STAGE 3 -->
+    <section class="panel stage-panel locked" id="stage-3">
+      <div class="panel-header">
+        <span class="stage-badge">LAYER 03 // TRANSMISSION 03</span>
+        <span class="stage-status" id="status-3">AWAITING LAYER 02</span>
+      </div>
+      <h2 id="s3Title">The Final Lock</h2>
+      <blockquote class="clue-box" id="s3Clue">
+        "The more of me there is, the less you see. What am I?"
+      </blockquote>
+
+      <div class="hint-row">
+        <button type="button" class="btn-hint" data-stage="3">💡 Request Hint</button>
+        <p class="hint-text hidden" id="hint-3">Turn off all the lights in a windowless room.</p>
+      </div>
+
+      <form class="solve-form" data-stage="3">
+        <input type="text" id="input-3" placeholder="Type your answer..." autocomplete="off" required disabled />
+        <button type="submit" class="btn-primary" disabled>SUBMIT</button>
+      </form>
+      <div class="feedback" id="feedback-3"></div>
+    </section>
+
+    <!-- FINAL VAULT UNLOCK -->
+    <section class="panel vault-panel" id="vaultPanel">
+      <div class="panel-header">
+        <span class="tag tag-green">MASTER VAULT CORE</span>
+        <span class="clearance" id="vaultStateLabel">SEALED</span>
+      </div>
+      <h2>Enter Combined Master Code</h2>
+      <p class="sub-instruction">
+        Combine the three code fragments retrieved from Layers 01, 02, and 03 in order.
+      </p>
+
+      <form class="vault-form" id="vaultForm">
+        <input type="text" id="masterCodeInput" maxlength="16" placeholder="______" autocomplete="off" required />
+        <button type="submit" class="btn-unlock">UNLOCK VAULT</button>
+      </form>
+      <div class="feedback" id="vaultFeedback"></div>
+
+      <!-- Secret Reward Container -->
+      <div class="reward-box hidden" id="rewardBox">
+        <div class="reward-badge">★ ACCESS GRANTED // VAULT OPENED ★</div>
+        <h3 id="rewardHeading">MISSION ACCOMPLISHED</h3>
+        <p id="rewardMessage">
+          You cracked every layer! The real-world lock combination is 74-92-19, and your prize is hidden inside the top drawer of my desk.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- GAME MASTER (GM) CUSTOMIZATION MODAL -->
+  <div class="modal-backdrop hidden" id="gmModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚙ GAME MASTER // PUZZLE BUILDER</h2>
+        <button type="button" class="btn-close" id="closeGmBtn">✕</button>
+      </div>
+      <p class="modal-desc">
+        Customize all three input clues, answers, code fragments, and your final secret message. Click <strong>Copy Shareable Link</strong> to encode your puzzle directly into the URL for your cousin.
+      </p>
+
+      <div class="gm-form">
+        <div class="gm-group">
+          <label>Mission Title</label>
+          <input type="text" id="gmTitle" />
+        </div>
+        <div class="gm-group">
+          <label>Briefing Intro</label>
+          <textarea id="gmIntro" rows="2"></textarea>
+        </div>
+
+        <hr class="divider" />
+        <span class="gm-section-label">LAYER 01 SETTINGS</span>
+        <div class="gm-group">
+          <label>Layer 1 Heading</label>
+          <input type="text" id="gmS1Title" />
+        </div>
+        <div class="gm-group">
+          <label>Layer 1 Clue / Question</label>
+          <textarea id="gmS1Clue" rows="2"></textarea>
+        </div>
+        <div class="gm-row three-col">
+          <div class="gm-group">
+            <label>Layer 1 Answer</label>
+            <input type="text" id="gmS1Ans" />
+          </div>
+          <div class="gm-group">
+            <label>Layer 1 Hint</label>
+            <input type="text" id="gmS1Hint" />
+          </div>
+          <div class="gm-group">
+            <label>Fragment 1</label>
+            <input type="text" id="gmFrag1" maxlength="4" />
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <span class="gm-section-label">LAYER 02 SETTINGS</span>
+        <div class="gm-group">
+          <label>Layer 2 Heading</label>
+          <input type="text" id="gmS2Title" />
+        </div>
+        <div class="gm-group">
+          <label>Layer 2 Clue / Question</label>
+          <textarea id="gmS2Clue" rows="2"></textarea>
+        </div>
+        <div class="gm-row three-col">
+          <div class="gm-group">
+            <label>Layer 2 Answer</label>
+            <input type="text" id="gmS2Ans" />
+          </div>
+          <div class="gm-group">
+            <label>Layer 2 Hint</label>
+            <input type="text" id="gmS2Hint" />
+          </div>
+          <div class="gm-group">
+            <label>Fragment 2</label>
+            <input type="text" id="gmFrag2" maxlength="4" />
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <span class="gm-section-label">LAYER 03 SETTINGS</span>
+        <div class="gm-group">
+          <label>Layer 3 Heading</label>
+          <input type="text" id="gmS3Title" />
+        </div>
+        <div class="gm-group">
+          <label>Layer 3 Clue / Question</label>
+          <textarea id="gmS3Clue" rows="2"></textarea>
+        </div>
+        <div class="gm-row three-col">
+          <div class="gm-group">
+            <label>Layer 3 Answer</label>
+            <input type="text" id="gmS3Ans" />
+          </div>
+          <div class="gm-group">
+            <label>Layer 3 Hint</label>
+            <input type="text" id="gmS3Hint" />
+          </div>
+          <div class="gm-group">
+            <label>Fragment 3</label>
+            <input type="text" id="gmFrag3" maxlength="4" />
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <div class="gm-group">
+          <label>Final Secret Message / Hidden Code Reveal</label>
+          <textarea id="gmReward" rows="3"></textarea>
+        </div>
+
+        <div class="gm-actions">
+          <button type="button" class="btn-ghost" id="resetDefaultBtn">Reset Default</button>
+          <button type="button" class="btn-primary" id="applyPreviewBtn">Apply & Preview</button>
+          <button type="button" class="btn-unlock" id="copyShareUrlBtn">🔗 Copy Shareable Link</button>
+        </div>
+        <div class="feedback" id="gmFeedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_CONFIG = {
+      title: "OPERATION: HIDDEN CIPHER",
+      intro: "Three security layers protect the final access code. Solve each transmission below and type the correct answer to extract its two-character code fragment, then enter the combined master code into the Vault Core at the bottom.",
+      s1Title: "The game we use to play as kids.",
+      s1Clue: '"A character you had was broken by the amount of characters I had from the same game in a box, what was the serious name of that game"',
+      s1Ans: "Skylanders",
+      s1Hint: "Think about the name of the character I crushed it starts with c and ends with p.",
+      frag1: "11",
+      s2Title: "The time I lost my 3ds",
+      s2Clue: '"I have told you many times the color of my first 3ds, what was it"',
+      s2Ans: "red",
+      s2Hint: "no clue for this one, just remember the color of my 3ds",
+      frag2: "14",
+      s3Title: "Our Friends",
+      s3Clue: '"Out of our friend group in discord, who in real life was the first friend I introduced you to"',
+      s3Ans: "Chris",
+      s3Hint: "His name starts with C.",
+      frag3: "o4",
+      reward: "You cracked every layer! The combination is 11-14-o4, and your prize is a 20$ digital Roblox code (RIZEEV5FNXOOPCGRUQ). Happy late birthday dude"
+    };
+
+    let config = loadConfigFromUrl() || { ...DEFAULT_CONFIG };
+
+    function encodeConfig(obj) {
+      return btoa(encodeURIComponent(JSON.stringify(obj)));
+    }
+
+    function loadConfigFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const data = params.get("c");
+      if (!data) return null;
+      try {
+        return JSON.parse(decodeURIComponent(atob(data)));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function normalizeAnswer(str) {
+      return str
+        .trim()
+        .toUpperCase()
+        .replace(/^(A|AN|THE)\s+/i, "")
+        .replace(/[^\w\s-]/g, "");
+    }
+
+    function initPuzzle() {
+      document.getElementById("missionTitle").textContent = config.title;
+      document.getElementById("missionIntro").textContent = config.intro;
+
+      [1, 2, 3].forEach((num) => {
+        document.getElementById(`s${num}Title`).textContent = config[`s${num}Title`];
+        document.getElementById(`s${num}Clue`).textContent = config[`s${num}Clue`];
+        document.getElementById(`hint-${num}`).textContent = config[`s${num}Hint`];
+        document.getElementById(`hint-${num}`).classList.add("hidden");
+        document.getElementById(`input-${num}`).value = "";
+        document.getElementById(`feedback-${num}`).textContent = "";
+
+        const slot = document.getElementById(`frag-${num - 1}`);
+        slot.textContent = "--";
+        slot.classList.remove("revealed");
+      });
+
+      setStageLock(1, false);
+      setStageLock(2, true);
+      setStageLock(3, true);
+
+      document.getElementById("status-1").textContent = "ACTIVE";
+      document.getElementById("status-2").textContent = "AWAITING LAYER 01";
+      document.getElementById("status-3").textContent = "AWAITING LAYER 02";
+
+      document.getElementById("masterCodeInput").value = "";
+      document.getElementById("vaultFeedback").textContent = "";
+      document.getElementById("rewardBox").classList.add("hidden");
+      document.getElementById("vaultStateLabel").textContent = "SEALED";
+      document.getElementById("vaultStateLabel").classList.remove("open");
+    }
+
+    function setStageLock(stageNum, isLocked) {
+      const panel = document.getElementById(`stage-${stageNum}`);
+      const inputs = panel.querySelectorAll("input, button.btn-primary");
+      if (isLocked) {
+        panel.classList.add("locked");
+        panel.classList.remove("active", "solved");
+        inputs.forEach((el) => (el.disabled = true));
+      } else {
+        panel.classList.remove("locked");
+        panel.classList.add("active");
+        inputs.forEach((el) => (el.disabled = false));
+      }
+    }
+
+    function completeStage(stageNum, fragmentValue) {
+      const panel = document.getElementById(`stage-${stageNum}`);
+      panel.classList.remove("active");
+      panel.classList.add("solved");
+
+      const status = document.getElementById(`status-${stageNum}`);
+      status.textContent = `SOLVED // FRAGMENT: ${fragmentValue}`;
+
+      const slot = document.getElementById(`frag-${stageNum - 1}`);
+      slot.textContent = fragmentValue;
+      slot.classList.add("revealed");
+
+      if (stageNum < 3) {
+        const nextStage = stageNum + 1;
+        setStageLock(nextStage, false);
+        document.getElementById(`status-${nextStage}`).textContent = "ACTIVE";
+      }
+    }
+
+    // Hint toggles
+    document.querySelectorAll(".btn-hint").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const stg = btn.getAttribute("data-stage");
+        document.getElementById(`hint-${stg}`).classList.toggle("hidden");
+      });
+    });
+
+    // Stage 1, 2, 3 Form Submissions
+    document.querySelectorAll(".solve-form").forEach((form) => {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const stage = Number(form.getAttribute("data-stage"));
+        const userAns = normalizeAnswer(document.getElementById(`input-${stage}`).value);
+        const expectedAns = normalizeAnswer(config[`s${stage}Ans`]);
+        const frag = config[`frag${stage}`];
+        const fb = document.getElementById(`feedback-${stage}`);
+
+        if (userAns && userAns === expectedAns) {
+          fb.className = "feedback success";
+          fb.textContent =
+            stage < 3
+              ? `✓ CORRECT! Fragment [ ${frag} ] extracted. Layer 0${stage + 1} unlocked.`
+              : `✓ CORRECT! Final Fragment [ ${frag} ] extracted. Enter the full code below.`;
+          completeStage(stage, frag);
+        } else {
+          fb.className = "feedback error";
+          fb.textContent = "✕ INCORRECT ANSWER: Try again or click Request Hint.";
+        }
+      });
+    });
+
+    // Final Master Vault Form
+    document.getElementById("vaultForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const entered = document.getElementById("masterCodeInput").value.trim().toUpperCase().replace(/[\s-]/g, "");
+      const expected = `${config.frag1}${config.frag2}${config.frag3}`.toUpperCase().replace(/[\s-]/g, "");
+      const fb = document.getElementById("vaultFeedback");
+
+      if (entered === expected) {
+        fb.className = "feedback success";
+        fb.textContent = "✓ MASTER CIPHER VERIFIED.";
+        document.getElementById("vaultStateLabel").textContent = "UNLOCKED";
+        document.getElementById("vaultStateLabel").classList.add("open");
+        document.getElementById("rewardMessage").textContent = config.reward;
+        document.getElementById("rewardBox").classList.remove("hidden");
+      } else {
+        fb.className = "feedback error";
+        fb.textContent = "✕ INVALID MASTER CODE. Combine all three extracted fragments in sequence.";
+      }
+    });
+
+    // Game Master Modal Controls
+    const gmModal = document.getElementById("gmModal");
+
+    function openGmModal() {
+      document.getElementById("gmTitle").value = config.title;
+      document.getElementById("gmIntro").value = config.intro;
+
+      [1, 2, 3].forEach((num) => {
+        document.getElementById(`gmS${num}Title`).value = config[`s${num}Title`];
+        document.getElementById(`gmS${num}Clue`).value = config[`s${num}Clue`];
+        document.getElementById(`gmS${num}Ans`).value = config[`s${num}Ans`];
+        document.getElementById(`gmS${num}Hint`).value = config[`s${num}Hint`];
+        document.getElementById(`gmFrag${num}`).value = config[`frag${num}`];
+      });
+
+      document.getElementById("gmReward").value = config.reward;
+      document.getElementById("gmFeedback").textContent = "";
+      gmModal.classList.remove("hidden");
+    }
+
+    function readGmInputs() {
+      return {
+        title: document.getElementById("gmTitle").value.trim() || DEFAULT_CONFIG.title,
+        intro: document.getElementById("gmIntro").value.trim() || DEFAULT_CONFIG.intro,
+        s1Title: document.getElementById("gmS1Title").value.trim() || DEFAULT_CONFIG.s1Title,
+        s1Clue: document.getElementById("gmS1Clue").value.trim() || DEFAULT_CONFIG.s1Clue,
+        s1Ans: document.getElementById("gmS1Ans").value.trim() || DEFAULT_CONFIG.s1Ans,
+        s1Hint: document.getElementById("gmS1Hint").value.trim() || DEFAULT_CONFIG.s1Hint,
+        frag1: document.getElementById("gmFrag1").value.trim().toUpperCase() || "74",
+        s2Title: document.getElementById("gmS2Title").value.trim() || DEFAULT_CONFIG.s2Title,
+        s2Clue: document.getElementById("gmS2Clue").value.trim() || DEFAULT_CONFIG.s2Clue,
+        s2Ans: document.getElementById("gmS2Ans").value.trim() || DEFAULT_CONFIG.s2Ans,
+        s2Hint: document.getElementById("gmS2Hint").value.trim() || DEFAULT_CONFIG.s2Hint,
+        frag2: document.getElementById("gmFrag2").value.trim().toUpperCase() || "92",
+        s3Title: document.getElementById("gmS3Title").value.trim() || DEFAULT_CONFIG.s3Title,
+        s3Clue: document.getElementById("gmS3Clue").value.trim() || DEFAULT_CONFIG.s3Clue,
+        s3Ans: document.getElementById("gmS3Ans").value.trim() || DEFAULT_CONFIG.s3Ans,
+        s3Hint: document.getElementById("gmS3Hint").value.trim() || DEFAULT_CONFIG.s3Hint,
+        frag3: document.getElementById("gmFrag3").value.trim().toUpperCase() || "X9",
+        reward: document.getElementById("gmReward").value.trim() || DEFAULT_CONFIG.reward
+      };
+    }
+
+    document.getElementById("openGmBtn").addEventListener("click", openGmModal);
+    document.getElementById("closeGmBtn").addEventListener("click", () => gmModal.classList.add("hidden"));
+
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.shiftKey &&
+        e.key.toUpperCase() === "G" &&
+        document.activeElement.tagName !== "INPUT" &&
+        document.activeElement.tagName !== "TEXTAREA"
+      ) {
+        openGmModal();
+      }
+    });
+
+    document.getElementById("applyPreviewBtn").addEventListener("click", () => {
+      config = readGmInputs();
+      initPuzzle();
+      gmModal.classList.add("hidden");
+    });
+
+    document.getElementById("resetDefaultBtn").addEventListener("click", () => {
+      config = { ...DEFAULT_CONFIG };
+      openGmModal();
+      initPuzzle();
+      const fb = document.getElementById("gmFeedback");
+      fb.className = "feedback success";
+      fb.textContent = "Reset to default mission parameters.";
+    });
+
+    document.getElementById("copyShareUrlBtn").addEventListener("click", async () => {
+      config = readGmInputs();
+      initPuzzle();
+      const encoded = encodeConfig(config);
+      const shareUrl = `${window.location.origin}${window.location.pathname}?c=${encoded}`;
+      const fb = document.getElementById("gmFeedback");
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        fb.className = "feedback success";
+        fb.textContent = "✓ Shareable URL copied to clipboard! Send it directly to your cousin.";
+      } catch (err) {
+        fb.className = "feedback amber";
+        fb.textContent = `Copy this link: ${shareUrl}`;
+      }
+    });
+
+    initPuzzle();
+  </script>
+</body>
+</html>
